@@ -18,11 +18,11 @@ namespace FeatureFlag
             services.AddSingleton(configuration)
                     .AddFeatureManagement();
 
-            await Startup.ConfigureServices(services);
+            await BasicFunctionality.ConfigureServices(services);
         }
     }
 
-    public static class Startup
+    public static class BasicFunctionality
     {
         public static async Task ConfigureServices(IServiceCollection services)
         {
@@ -30,12 +30,16 @@ namespace FeatureFlag
             {
                 IFeatureManager featureManager = serviceProvider.GetRequiredService<IFeatureManager>();
 
-                const string FeatureName = "FeatureU";
+                int[] features = [1, 2, 3];
 
-                bool enabled = await featureManager.IsEnabledAsync(FeatureName);
+                string[] stringFeatures = features.Select(x => x.ToString()).ToArray();
+                foreach (var FeatureName in stringFeatures)
+                {
+                    bool enabled = await featureManager.IsEnabledAsync(FeatureName);
 
-                // Output results
-                Console.WriteLine($"The {FeatureName} feature is {(enabled ? "enabled" : "disabled")}");
+                    // Output results
+                    Console.WriteLine($"Feature {FeatureName} is {(enabled ? "enabled" : "disabled")}"); 
+                }
             }
         }
     }
